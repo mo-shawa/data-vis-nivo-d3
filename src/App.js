@@ -2,21 +2,41 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-  const API_USERS_URL = 'https://jsonplaceholder.typicode.com/users'
-  const API_ALBUMS_URL = 'https://jsonplaceholder.typicode.com/albums'
+  const BASE_URL = 'https://jsonplaceholder.typicode.com'
+
 
   const [users, setUsers] = useState([])
+  const [albums, setAlbums] = useState([])
+  const [photos, setPhotos] = useState([])
 
   const fetchData = async () => {
-    const res = await fetch(API_USERS_URL)
-    let data = await res.json()
-    // figured it makes more sense to cull 3 random users than set random 7 
-    for (let i = 0; i < 3; i++) {
-      const random = Math.floor(Math.random() * (data.length - i)) // decrease max by number of iterations, so we don't get an index outside the new length of array 
-      data.splice(random, 1)
+    try {
+      const [userRes, albumRes, photoRes] = await Promise.all([fetch(`${BASE_URL}/users`), fetch(`${BASE_URL}/albums`), fetch(`${BASE_URL}/photos`)]) // ensure all promises are fulfilled before we manipulate data
+      let userData = await userRes.json()
+      let albumData = await albumRes.json()
+      let photoData = await photoRes.json()
+      setPhotos(photoData)
+      // Randomize users:
+      // figured it makes more sense to cull 3 random users than set random 7 
+      for (let i = 0; i < 3; i++) {
+        const random = Math.floor(Math.random() * (userData.length - i)) // decrease max by number of iterations, so we don't get an index outside the new length of array 
+        userData.splice(random, 1)
+      }
+      setUsers(userData)
+      // Albums:
+      const userIDs = userData.map(user => user.id)
+      const filteredAlbums = albumData.filter(album => userIDs.includes(album.userId))
+
+      // Photos:
+      const albumIDs = filteredAlbums.map(album => album.id)
+      const filteredPhotos = photoData.filter(photo => albumIDs.includes(photo.albumId))
+      console.log(filteredPhotos)
+
+    } catch (error) {
+      console.error(error)
     }
-    setUsers(data)
   }
+
 
   useEffect(() => {
     fetchData()
@@ -24,10 +44,7 @@ function App() {
 
   return (
     <div className="App">
-      {users.map(user => (
-        JSON.stringify(user)
-      ))}
-    </div>
+      hello    </div>
   );
 }
 
