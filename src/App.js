@@ -6,6 +6,7 @@ function App() {
   const BASE_URL = 'https://jsonplaceholder.typicode.com'
 
   const [data, setData] = useState([])
+  const [keys, setKeys] = useState([])
 
   const fetchData = async () => {
     try {
@@ -33,13 +34,14 @@ function App() {
           if (album.userId === temp.id) {
             temp[album.title] = 0
             userAlbums[album.id] = album.title
+            setKeys(prev => [...prev, album.title])
           }
 
         })
 
         photoData.forEach(photo => {
           for (let key in userAlbums) {
-            if (key == photo.albumId) temp[userAlbums[key]]++
+            if (parseInt(key) === photo.albumId) temp[userAlbums[key]]++
           }
         })
 
@@ -67,7 +69,7 @@ function App() {
         <ResponsiveBar
           data={data}
           indexBy='email'
-          keys={['albums']}
+          keys={keys}
         />
       </div>
 
