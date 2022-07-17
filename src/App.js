@@ -8,6 +8,7 @@ function App() {
 
   const [data, setData] = useState([])
   const [keys, setKeys] = useState([])
+  const [selected, setSelected] = useState([])
 
   const fetchData = async () => {
     try {
@@ -48,7 +49,6 @@ function App() {
 
         return temp
       })
-      console.log(consolidatedData) // all users have 10 albums, all albums have 50 photos  
       setData(consolidatedData)
 
 
@@ -63,22 +63,34 @@ function App() {
     fetchData()
   }, []) // empty dependency array allows useEffect to run only on component mount (mimic componentDidMount in class components)
 
-  const options = keys.map(key => {
-    return { value: key, label: key }
-  })
-
   const handleChange = e => {
     console.log(e)
-    const temp = [...keys]
-    const idx = temp.findIndex(key => key === e.value)
-    console.log(idx)
-    temp.splice(idx, 1)
-    setKeys(temp)
+    const difference = selected.filter(el => !e.includes(el)) // react select doesn't have a remove event, so we have to compare state with event 
+    if (difference.length) {
+      setKeys(prev => [...prev, difference[0].label]) // add key back into state
+      const tempSelected = [...selected] // copy selected state to splice out 
+      const idx = tempSelected.findIndex(el => el.label === difference[0].label)
+      tempSelected.splice(idx, 1)
+      setSelected(tempSelected)
+      return
+      // works but keys are not in the same order 
+    }
+    console.log(difference)
+
+    const tempKeys = [...keys]
+    const key = e[e.length - 1]
+
+    const selectedAlbum = tempKeys.splice(key.value, 1)
+    setSelected(prev => [...prev, key])
+    setKeys(tempKeys)
+    console.log(e.length, selected.length)
+    // if (e.length === selected.length) console.log('same length')
   }
 
   return (
     <div className="App">
       <div className="container">
+        <Select isMulti options={keys.map((key, idx) => ({ value: idx, label: key }))} onChange={handleChange} />
         <ResponsiveBar
           data={data}
           keys={keys}
@@ -87,7 +99,6 @@ function App() {
           padding={0.3}
         />
       </div>
-      <Select options={options} onChange={handleChange} />
     </div>
   );
 }
