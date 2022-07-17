@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ResponsiveBar } from '@nivo/bar';
+import Select from 'react-select';
 import './App.css';
 
 function App() {
@@ -62,9 +63,21 @@ function App() {
     fetchData()
   }, []) // empty dependency array allows useEffect to run only on component mount (mimic componentDidMount in class components)
 
+  const options = keys.map(key => {
+    return { value: key, label: key }
+  })
+
+  const handleChange = e => {
+    console.log(e)
+    const temp = [...keys]
+    const idx = temp.findIndex(key => key === e.value)
+    console.log(idx)
+    temp.splice(idx, 1)
+    setKeys(temp)
+  }
+
   return (
     <div className="App">
-
       <div className="container">
         <ResponsiveBar
           data={data}
@@ -74,7 +87,7 @@ function App() {
           padding={0.3}
         />
       </div>
-
+      <Select options={options} onChange={handleChange} />
     </div>
   );
 }
