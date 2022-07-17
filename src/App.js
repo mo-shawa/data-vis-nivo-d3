@@ -68,8 +68,10 @@ function App() {
       <div className="container">
         <ResponsiveBar
           data={data}
-          indexBy='email'
           keys={keys}
+          indexBy='email'
+          margin={{ top: 50, right: 50, bottom: 50, left: 50 }}
+          padding={0.3}
         />
       </div>
 
