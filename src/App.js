@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import { Spinner } from './components/Spinner/Spinner';
 import { BarGraph } from './components/BarGraph';
 import { Top } from './components/Top'
 
@@ -9,9 +10,12 @@ function App() {
   const [data, setData] = useState([])
   const [keys, setKeys] = useState([])
   const [selected, setSelected] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   const fetchData = async () => {
     try {
+      setIsLoading(true)
+      await setInterval(() => null, 3000)
       const [userRes, albumRes, photoRes] = await Promise.all([fetch(`${BASE_URL}/users`), fetch(`${BASE_URL}/albums`), fetch(`${BASE_URL}/photos`)])
       // ensure all promises are fulfilled before we manipulate data
       let [userData, albumData, photoData] = await Promise.all([userRes.json(), albumRes.json(), photoRes.json()])
@@ -52,7 +56,7 @@ function App() {
       })
 
       setData(consolidatedData)
-
+      setIsLoading(false)
     } catch (error) {
       console.error(error)
     }
@@ -93,8 +97,14 @@ function App() {
         <h1>Demo Dash</h1>
       </div>
       <div className="container">
-        <Top keys={keys} handleChange={handleChange} />
-        <BarGraph data={data} keys={keys} />
+        {isLoading ?
+          <Spinner />
+          :
+          <>
+            <Top keys={keys} handleChange={handleChange} />
+            <BarGraph data={data} keys={keys} />
+          </>
+        }
       </div>
     </div>
   );
