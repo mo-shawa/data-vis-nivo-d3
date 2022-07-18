@@ -50,9 +50,8 @@ function App() {
 
         return temp
       })
+
       setData(consolidatedData)
-
-
 
     } catch (error) {
       console.error(error)
