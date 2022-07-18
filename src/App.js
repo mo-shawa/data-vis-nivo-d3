@@ -35,7 +35,7 @@ function App() {
         albumData.forEach(album => {
           if (album.userId === temp.id) { // if album belongs to a user
             temp[album.title] = 0 // add album with initial photo count to user object
-            userAlbums[album.id] = album.title // track all users albums away from email/id
+            userAlbums[album.id] = album.title // track all users albums seperately from email/id
             setKeys(prev => [...prev, album.title]) // add album name to keys for the bar chart
           }
 
@@ -43,8 +43,8 @@ function App() {
 
         photoData.forEach(photo => {
           for (let key in userAlbums) {
+            // increment photo count where album ID and photo.albumId match
             if (parseInt(key) === photo.albumId) temp[userAlbums[key]]++
-            // 
           }
         })
 
@@ -64,25 +64,28 @@ function App() {
     fetchData()
   }, []) // empty dependency array allows useEffect to run only on component mount (mimic componentDidMount in class components)
 
-  const handleChange = e => {
-    console.log(e)
-    const difference = selected.filter(el => !e.includes(el)) // react select doesn't have a remove event, so we have to compare state with event 
+  const handleChange = evt => {
+    // check if change was a remove or clear event
+    const tempKeys = [...keys]
+    const tempSelected = [...selected]
+    // clear out bug was due to temp variables being reinitialized each loop
+    const difference = selected.filter(el => !evt.includes(el)) // react select doesn't have a remove event, so we have to compare state with event 
     if (difference.length) {
-      difference.forEach((diff, i) => {
-        setKeys(prev => [...prev, difference[i].label]) // add key back into state
-        const tempSelected = [...selected] // copy selected state to splice out 
-        const idx = tempSelected.findIndex(el => el.label === difference[i].label)
-        tempSelected.splice(idx, 1)
-        setSelected(tempSelected)
+
+      difference.forEach(diff => {
+        tempKeys.splice(diff.value, 0, diff.label) // splice in the returned key at original index
+        const selectedIdx = tempSelected.findIndex(el => el.value === diff.value)
+        tempSelected.splice(selectedIdx, 1) // splice removed filter out from selected state
       })
+
+      setKeys(tempKeys)
+      setSelected(tempSelected)
       return
     }
-
-    const tempKeys = [...keys]
-    const key = e[e.length - 1]
-
-    tempKeys.splice(key.value, 1)
-    setSelected(prev => [...prev, key])
+    // change wasn't a remove event - so filter out last album added to event object
+    const filtered = evt[evt.length - 1] //
+    tempKeys.splice(filtered.value, 1)
+    setSelected(prev => [...prev, filtered])
     setKeys(tempKeys)
   }
 
@@ -91,7 +94,7 @@ function App() {
       <div className="title-wrapper">
         <h1>Demo Dash</h1>
       </div>
-      <div class="container">
+      <div className="container">
         <Top keys={keys} handleChange={handleChange} />
         <BarGraph data={data} keys={keys} />
       </div>

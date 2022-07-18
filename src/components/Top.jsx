@@ -4,14 +4,14 @@ import Select from 'react-select';
 
 export const Top = (props) => {
 
-    const styles = {
+    const customStyles = {
 
         valueContainer: (base) => ({
             ...base,
             flexWrap: 'nowrap',
         }),
 
-        menuList: base => ({
+        menuList: (base) => ({
             ...base,
             "::-webkit-scrollbar": {
                 width: "0.5rem",
@@ -38,7 +38,7 @@ export const Top = (props) => {
                     isMulti
                     options={props.keys.map((key, idx) => ({ value: idx, label: key }))}
                     onChange={props.handleChange}
-                    styles={styles}
+                    styles={customStyles}
                 />
             </div>
         </div>
