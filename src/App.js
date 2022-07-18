@@ -58,7 +58,6 @@ function App() {
     }
   }
 
-
   useEffect(() => {
     fetchData()
   }, []) // empty dependency array allows useEffect to run only on component mount (mimic componentDidMount in class components)

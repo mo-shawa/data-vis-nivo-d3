@@ -4,17 +4,20 @@ import { ResponsiveBar } from '@nivo/bar';
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { hasError: false, errorInfo: '' };
   }
 
   static getDerivedStateFromError(error) {
-    console.error(error)
-    return { hasError: true };
+    console.log(error)
+    return { hasError: true, errorInfo: error.message };
   }
 
   render() {
     if (this.state.hasError) {
-      return <h1>Something went wrong.</h1>;
+      return <details>
+        <summary className='error'>Something went wrong.</summary>
+        {this.state.errorInfo}
+      </details>;
     }
     return this.props.children;
   }
