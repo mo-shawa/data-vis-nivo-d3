@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/nexxt-assessment/static/css/main.e7adcff4.css",
-    "main.js": "/nexxt-assessment/static/js/main.9ef661d6.js",
-    "static/js/787.44028f42.chunk.js": "/nexxt-assessment/static/js/787.44028f42.chunk.js",
-    "index.html": "/nexxt-assessment/index.html",
-    "main.e7adcff4.css.map": "/nexxt-assessment/static/css/main.e7adcff4.css.map",
-    "main.9ef661d6.js.map": "/nexxt-assessment/static/js/main.9ef661d6.js.map",
-    "787.44028f42.chunk.js.map": "/nexxt-assessment/static/js/787.44028f42.chunk.js.map"
+    "main.css": "/data-vis-nivo-d3/static/css/main.e7adcff4.css",
+    "main.js": "/data-vis-nivo-d3/static/js/main.dbbaca90.js",
+    "static/js/787.d53006f7.chunk.js": "/data-vis-nivo-d3/static/js/787.d53006f7.chunk.js",
+    "index.html": "/data-vis-nivo-d3/index.html",
+    "main.e7adcff4.css.map": "/data-vis-nivo-d3/static/css/main.e7adcff4.css.map",
+    "main.dbbaca90.js.map": "/data-vis-nivo-d3/static/js/main.dbbaca90.js.map",
+    "787.d53006f7.chunk.js.map": "/data-vis-nivo-d3/static/js/787.d53006f7.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e7adcff4.css",
-    "static/js/main.9ef661d6.js"
+    "static/js/main.dbbaca90.js"
   ]
 }
